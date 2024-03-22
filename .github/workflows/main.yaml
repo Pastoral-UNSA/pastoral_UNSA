@@ -1,0 +1,31 @@
+name: Deploy Code to Release Branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Push to Release Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+        - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+        - name: Build Pastoral_UNSA app to prod
+        run: npm install && npm run build:prod
+
+      # Workflow dispatch event that pushes the current version to the release branch.
+      # From here the secondary production deployment workflow will trigger to build the dependencies.
+      - name: Deploy 🚀
+        uses: Pastoral-UNSA/pastoral_UNSA
+        with:
+          ACCESS_TOKEN: ${{ secrets.GHA_DEPLOY_KEY}}
+          BASE_BRANCH: main
+          BRANCH: main
+          FOLDER: /pastoral_UNSA/dist/browser

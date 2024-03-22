@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve --open",
     "build": "ng build",
+    "build:prod": "ng build --configuration=production --base-href=/pastoral_UNSA/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:pastoral_UNSA": "node dist/pastoral-unsa/server/server.mjs"
