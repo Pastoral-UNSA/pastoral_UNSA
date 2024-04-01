@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import {
   AbstractControl,
@@ -7,12 +7,25 @@ import {
   FormGroup,
   Validators,
   ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import OptionSelect from './../../interfaces/optionSelect';
 import optionsCareer from '../../utils/constans';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
+
+@Component({
+  selector: 'snack-bar-annotated-component-example',
+  templateUrl: 'activities-error.snackbar.html',
+  standalone: true,
+  imports: [MatFormFieldModule, FormsModule, MatInputModule, MatButtonModule],
+})
+export class SnackBarAnnotatedComponentExample {
+  snackBarRef = inject(MatSnackBarRef);
+}
 
 @Component({
   selector: 'app-register',
@@ -25,8 +38,8 @@ import optionsCareer from '../../utils/constans';
   ],
   templateUrl: './register.component.html',
 })
-
 export default class RegisterComponent {
+  
   form: FormGroup = new FormGroup({
     firstName: new FormControl(''),
     lastName: new FormControl(''),
@@ -38,8 +51,12 @@ export default class RegisterComponent {
 
   submitted = false;
   careersOptions: OptionSelect[] = optionsCareer;
-  
-  constructor(private formBuilder: FormBuilder) {}
+  activities: number[] = [];
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -51,14 +68,25 @@ export default class RegisterComponent {
     });
   }
 
+  durationInSeconds = 5;
+
+  openSnackBar() {
+    this._snackBar.openFromComponent(SnackBarAnnotatedComponentExample, {
+      duration: this.durationInSeconds * 1000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
+    });
+  }
+
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;
   }
 
   onSubmit(): void {
     this.submitted = true;
-
-    if (this.form.invalid) {
+    if (this.activities.length == 0) {
+      this.openSnackBar();
+    } else if (this.form.invalid) {
       return;
     }
 
