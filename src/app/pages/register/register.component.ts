@@ -1,15 +1,29 @@
 import { Component } from '@angular/core';
 
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import OptionSelect from './../../interfaces/optionSelect';
+import optionsCareer from '../../utils/constans';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, MatFormFieldModule, MatInputModule],
-  templateUrl: './register.component.html'
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
+  templateUrl: './register.component.html',
 })
 
 export default class RegisterComponent {
@@ -23,19 +37,18 @@ export default class RegisterComponent {
   });
 
   submitted = false;
-
+  careersOptions: OptionSelect[] = optionsCareer;
+  
   constructor(private formBuilder: FormBuilder) {}
 
-  ngOnInit(): void{
-    this.form = this.formBuilder.group(
-      {
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
-        career: ['', Validators.required],
-        phone: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-      }
-    );
+  ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      career: ['', Validators.required],
+      phone: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+    });
   }
 
   get f(): { [key: string]: AbstractControl } {
@@ -56,5 +69,4 @@ export default class RegisterComponent {
     this.submitted = false;
     this.form.reset();
   }
-
 }
