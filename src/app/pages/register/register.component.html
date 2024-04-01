@@ -132,11 +132,12 @@
                 </p>
             </div>
             <div class="grid gap-2">
-                <div
-                    class="flex flex-col border rounded-md p-4 cursor-pointer hover:bg-amber-100 dark:hover:bg-amber-100 transform active:scale-95 transition-transform">
+                <div (click)="setActivities(1)"
+                    class="flex flex-col border rounded-md p-4 cursor-pointer md:hover:bg-amber-100 md:dark:hover:bg-amber-100 transform active:scale-95 transition-transform"
+                    [ngClass]="{ 'bg-amber-100': activities.indexOf(1) != -1 }">
                     <button type="button" role="checkbox" aria-checked="false" data-state="unchecked" value="on"
                         class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus:outline-none focus:ring-1 focus:border-amber-300 focus:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground sr-only"
-                        id="sacramentos"></button>
+                        id="sacramentos" (click)="setActivities(1)"></button>
                     <div class="flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -151,8 +152,9 @@
                         </label>
                     </div>
                 </div>
-                <div
-                    class="flex flex-col border rounded-md p-4 cursor-pointer hover:bg-amber-100 dark:hover:bg-amber-100 transform active:scale-95 transition-transform">
+                <div (click)="setActivities(2)"
+                    class="flex flex-col border rounded-md p-4 cursor-pointer md:hover:bg-amber-100 md:dark:hover:bg-amber-100 transform active:scale-95 transition-transform"
+                    [ngClass]="{ 'bg-amber-100': activities.indexOf(2) != -1 }">
                     <button type="button" role="checkbox" aria-checked="false" data-state="unchecked" value="on"
                         class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus:outline-none focus:ring-1 focus:border-amber-300 focus:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground sr-only"
                         id="albergue"></button>
@@ -169,8 +171,9 @@
                         </label>
                     </div>
                 </div>
-                <div
-                    class="flex flex-col border rounded-md p-4 cursor-pointer hover:bg-amber-100 dark:hover:bg-amber-100 transform active:scale-95 transition-transform">
+                <div (click)="setActivities(3)"
+                    class="flex flex-col border rounded-md p-4 cursor-pointer md:hover:bg-amber-100 md:dark:hover:bg-amber-100 transform active:scale-95 transition-transform"
+                    [ngClass]="{ 'bg-amber-100': activities.indexOf(3) != -1 }">
                     <button type="button" role="checkbox" aria-checked="true" data-state="checked" value="on"
                         class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus:outline-none focus:ring-1 focus:border-amber-300 focus:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground sr-only"
                         id="coro">

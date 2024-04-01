@@ -39,7 +39,11 @@ export class SnackBarAnnotatedComponentExample {
   templateUrl: './register.component.html',
 })
 export default class RegisterComponent {
-  
+  careersOptions: OptionSelect[] = optionsCareer;
+  activities: number[] = [];
+  durationInSeconds = 5;
+  submitted = false;
+
   form: FormGroup = new FormGroup({
     firstName: new FormControl(''),
     lastName: new FormControl(''),
@@ -48,10 +52,6 @@ export default class RegisterComponent {
     email: new FormControl(''),
     activities: new FormControl(),
   });
-
-  submitted = false;
-  careersOptions: OptionSelect[] = optionsCareer;
-  activities: number[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -68,20 +68,6 @@ export default class RegisterComponent {
     });
   }
 
-  durationInSeconds = 5;
-
-  openSnackBar() {
-    this._snackBar.openFromComponent(SnackBarAnnotatedComponentExample, {
-      duration: this.durationInSeconds * 1000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top'
-    });
-  }
-
-  get f(): { [key: string]: AbstractControl } {
-    return this.form.controls;
-  }
-
   onSubmit(): void {
     this.submitted = true;
     if (this.activities.length == 0) {
@@ -91,6 +77,25 @@ export default class RegisterComponent {
     }
 
     console.log(JSON.stringify(this.form.value, null, 2));
+  }
+
+  get f(): { [key: string]: AbstractControl } {
+    return this.form.controls;
+  }
+
+  openSnackBar() {
+    this._snackBar.openFromComponent(SnackBarAnnotatedComponentExample, {
+      duration: this.durationInSeconds * 1000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
+  }
+
+  setActivities(idActivitie: number): void {
+    const activitie = this.activities.indexOf(idActivitie);
+    activitie === -1
+      ? this.activities.push(idActivitie)
+      : this.activities.splice(activitie, 1);
   }
 
   onReset(): void {
