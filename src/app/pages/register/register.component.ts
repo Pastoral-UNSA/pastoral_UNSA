@@ -44,7 +44,7 @@ import {
         display: block;
         background: white;
         color: #111827;
-        padding: 0 16px;
+        padding: 16px;
         top: 0;
       }
     `,
@@ -139,7 +139,7 @@ export default class RegisterComponent {
     const anchoPantalla = screen.width;
     const configMobile: MatDialogConfig = {
       minWidth: '250px',
-      maxWidth: '800px',
+      maxWidth: '350px',
       enterAnimationDuration: '300ms',
       exitAnimationDuration: '300ms',
       disableClose: true,
