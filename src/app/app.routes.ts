@@ -13,6 +13,10 @@ export const routes: Routes = [
     // ],
   },
   {
+    path: 'asistencias',
+    loadComponent: () => import('./pages/assistance/assistance.component'),
+  },
+  {
     path: 'register',
     loadComponent: () => import('./pages/register/register.component'),
   },
