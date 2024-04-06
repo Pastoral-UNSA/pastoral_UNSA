@@ -7,6 +7,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +24,9 @@ import { MatDividerModule } from '@angular/material/divider';
     MatDialogModule,
     MatExpansionModule,
     MatDividerModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatSidenavModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
