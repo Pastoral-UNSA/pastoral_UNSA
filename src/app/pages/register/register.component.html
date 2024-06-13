@@ -1,15 +1,20 @@
 <div class="flex justify-center p-8">
     <img src="../assets/logo_pastoral.webp" class="h-14 md:h-24" />
 </div>
-<div class="pb-6 md:pb-12">
+<div class="pb-6 md:pb-12 ">
     <div
-        class="mx-auto max-w-lg space-y-10 p-4 rounded-lg bg-card text-card-foreground h-full bg-opacity-50 sm:shadow-sm sm:p-6 sm:border">
-        <div class="space-y-2 text-center">
+        class="relative mx-auto max-w-lg p-4 rounded-lg bg-card text-card-foreground h-full bg-opacity-50 sm:shadow-sm sm:p-6 sm:border overflow-y-hidden">
+        @if (form.disabled){
+        <div class="absolute top-0 left-0 w-full ">
+            <mat-progress-bar color="accent" mode="query"></mat-progress-bar>
+        </div>
+        }
+        <div class="space-y-2 text-center mb-10">
             <h1 class="text-3xl font-bold">
-                Registro de Estudiantes
+                Registro de Estudiante
             </h1>
             <p class="text-gray-500 dark:text-gray-400">
-                Ingresa la información del estudiante para registrarlo como voluntario
+                Completa el formulario con los tus datos.
             </p>
         </div>
 
@@ -58,7 +63,38 @@
             </div>
 
             <!-- CAREER -->
-            <div class="space-y-2">
+            <div class="space-y-4">
+                <!-- <div class="space-y-2">
+                    <label
+                        class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        for="last-name">
+                        Carrera
+                    </label>
+                    <div class="relative">
+                        <input type="text" formControlName="lastName"
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:border-amber-300 focus:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-50"
+                            id="last-name" placeholder="Educación" maxlength="32"
+                            [ngClass]="{ 'border-red-500': submitted && f['lastName'].errors }" autocomplete="off"
+                            (keyup)="changeAutoComplete($event)">
+                        @if(filteredOptions.length){
+                        <div
+                            class="absolute top-11 left-0 bg-gray-300 rounded-md w-full max-h-32 overflow-x-hidden overscroll-x-contain">
+                            @for (carrera of filteredOptions; track carrera.id) {
+                            <option [value]="carrera.id"
+                                class="flex h-10 w-full bg-background px-3 py-2 text-sm ring-offset-background hover:bg-slate-500">
+                                {{ carrera.nombre }}</option>
+                            }
+                        </div>
+                        }
+                    </div>
+                    @if (submitted && f['lastName'].errors) {
+                    <div class="invalid-feedback tracking-wide text-red-500">
+                        @if (f['lastName'].errors['required']) {
+                        <div>El apellido es obligatorio</div>
+                        }
+                    </div>
+                    }
+                </div> -->
                 <label
                     class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     for="career">
@@ -68,8 +104,8 @@
                     class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:border-amber-300 focus:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-50 "
                     [ngClass]="{ 'border-red-500': submitted && f['career'].errors }">
                     <option value="" class="text-gray-500">Seleccionar carrera</option>
-                    @for (user of careersOptions; track user.value) {
-                    <option [value]="user.value">{{ user.label }}</option>
+                    @for (carrera of carreras; track carrera.id) {
+                    <option [value]="carrera.id">{{ carrera.nombre }}</option>
                     }
                 </select>
                 @if (submitted && f['career'].errors) {
@@ -79,6 +115,7 @@
                     }
                 </div>
                 }
+
             </div>
 
             <!-- PHONE -->
@@ -124,8 +161,54 @@
                 }
             </div>
 
+            <!-- PASSWORD -->
+            <div class="space-y-2">
+                <label
+                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    for="password">
+                    Contraseña
+                </label>
+                <input type="password" formControlName="password"
+                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:border-amber-300 focus:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-50"
+                    id="password" placeholder="*******" maxlength="20"
+                    [ngClass]="{ 'border-red-500': submitted && f['password'].errors }">
+                @if (submitted && f['password'].errors) {
+                <div class="invalid-feedback tracking-wide text-red-500">
+                    @if (f['password'].errors['required']) {
+                    <div>El Nombre de Usuario es obligatorio</div>
+                    }
+                    @if (f['password'].errors['minlength']) {
+                    <div>Password must be at least 6 characters</div>
+                    }
+                </div>
+                }
+            </div>
+
+            <!-- CONFIRMPASSWORD -->
+            <div class="space-y-2">
+                <label
+                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    for="confirmPassword">
+                    Confirmar Contraseña
+                </label>
+                <input type="password" formControlName="confirmPassword"
+                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:border-amber-300 focus:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-50"
+                    id="confirmPassword" placeholder="*******" maxlength="20"
+                    [ngClass]="{ 'border-red-500': submitted && f['confirmPassword'].errors }">
+                @if (submitted && f['confirmPassword'].errors) {
+                <div class="invalid-feedback tracking-wide text-red-500">
+                    @if (f['confirmPassword'].errors['required']) {
+                    <div>El Nombre de Usuario es obligatorio</div>
+                    }
+                    @if (f['confirmPassword'].errors['matching']) {
+                    <div>Confirm Password does not match</div>
+                    }
+                </div>
+                }
+            </div>
+
             <!-- ACTIVITIES -->
-            <div>
+            <!-- <div>
                 <label
                     class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-semibold">
                     Actividades de Voluntariado
@@ -223,12 +306,13 @@
                         </label>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <button mat-fab extended
                 class="inline-flex h-12 mt-12 items-center justify-center whitespace-nowrap shadow-md border-2 border-amber-300/100 bg-amber-50 rounded-md text-sm font-medium ring-offset-background transition-colors focus:outline-none focus:ring-1 focus:border-amber-400 focus:ring-amber-400 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground text-gray-700 hover:bg-amber-100 h-10 px-4 py-2 w-full transform active:scale-95 transition-transform"
-                type="submit">
+                type="submit" [disabled]="form.disabled">
                 REGISTRAR
             </button>
         </form>
+
     </div>
 </div>

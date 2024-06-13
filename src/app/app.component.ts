@@ -10,6 +10,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { HttpClientModule } from '@angular/common/http';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +30,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatDividerModule,
     MatToolbarModule,
     MatMenuModule,
-    MatSidenavModule
+    MatSidenavModule,
+    HttpClientModule,
+    NgxSpinnerModule,
+    MatProgressBarModule,
+    MatAutocompleteModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   AbstractControl,
@@ -9,11 +9,11 @@ import {
   ReactiveFormsModule,
   FormsModule,
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import OptionSelect from './../../interfaces/optionSelect';
-import optionsCareer from '../../utils/constans';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import {
@@ -25,6 +25,13 @@ import {
   MatDialogContent,
   MatDialogConfig,
 } from '@angular/material/dialog';
+import { CarreraService } from '../../services/carrera-service';
+import { HttpClientModule } from '@angular/common/http';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import Validation from '../../utils/validation';
+import RegistroEstudiante from '../../interfaces/registroEstudiante';
+import { log } from 'console';
 
 @Component({
   selector: 'dialog-animations-example-dialog',
@@ -72,26 +79,35 @@ export class SnackBarAnnotatedComponentExample {
   selector: 'app-register',
   standalone: true,
   imports: [
+    HttpClientModule,
     ReactiveFormsModule,
     CommonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressBarModule,
+    FormsModule,
+    MatAutocompleteModule,
+    AsyncPipe,
   ],
   templateUrl: './register.component.html',
 })
-export default class RegisterComponent {
-  careersOptions: OptionSelect[] = optionsCareer;
+export default class RegisterComponent implements OnInit {
+  carreras: OptionSelect[] = [];
   activities: number[] = [];
   durationInSeconds = 5;
   submitted = false;
+  filteredOptions: OptionSelect[] = [];
+
+  private carreraService = inject(CarreraService);
 
   form: FormGroup = new FormGroup({
+    password: new FormControl(''),
+    confirmPassword: new FormControl(''),
     firstName: new FormControl(''),
     lastName: new FormControl(''),
     career: new FormControl(''),
     phone: new FormControl(''),
     email: new FormControl(''),
-    activities: new FormControl(),
   });
 
   constructor(
@@ -101,30 +117,73 @@ export default class RegisterComponent {
   ) {}
 
   ngOnInit(): void {
-    this.form = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      career: ['', Validators.required],
-      phone: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-    });
+    this.form = this.formBuilder.group(
+      {
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', Validators.required],
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        career: ['', Validators.required],
+        phone: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+      },
+      {
+        validators: [Validation.match('password', 'confirmPassword')],
+      }
+    );
+    this.form.disable();
+    this.carreraService.getCarreras().subscribe(
+      (data: OptionSelect[]) => {
+        if (data.length) {
+          this.carreras = data;
+          this.form.enable();
+        }
+      },
+      (error) => console.error('Error al obtener las carreras', error)
+    );
   }
 
   onSubmit(): void {
+    console.log('submit');
     this.submitted = true;
-    if (this.form.valid && this.activities.length) {
-      this.form.disable()
-      this.openDialog();
+    if (this.form.valid) {
+      console.log('submit-valid');
+      this.form.disable();
       console.log(JSON.stringify(this.form.value, null, 2));
-    } else if (this.activities.length == 0) {
-      this.openSnackBar();
+      const estudiante: RegistroEstudiante = {
+        contrasena: this.form.value.password,
+        nombres: this.form.value.firstName,
+        apellidos: this.form.value.lastName,
+        telefono: this.form.value.phone,
+        email: this.form.value.email,
+        carrera: this.form.value.career,
+      };
+      this.carreraService.registrarEstudianteBff(estudiante).subscribe(
+        (data) => {
+          console.log(data);
+          if (data.resultadoRegistro == true) {
+            this.openDialog();
+          } else {
+            this.form.enable();
+          }
+        },
+        (error) => console.error('Error al obtener las carreras', error)
+      );
     } else if (this.form.invalid) {
+      console.log('submit-INVALID');
       return;
     }
   }
-
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;
+  }
+
+  changeAutoComplete(event: any) {
+    console.log(event.target.value);
+    const filterValue = event.target.value.toLowerCase();
+    this.filteredOptions = this.carreras.filter((o) =>
+      o.nombre.toLowerCase().includes(filterValue)
+    );
   }
 
   openSnackBar() {

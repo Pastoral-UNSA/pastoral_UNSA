@@ -1,4 +1,4 @@
 export default interface OptionSelect {
-  value: number;
-  label: string;
+  id: number;
+  nombre: string;
 }
