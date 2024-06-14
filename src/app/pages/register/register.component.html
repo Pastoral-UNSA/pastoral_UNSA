@@ -4,14 +4,14 @@
 <div class="pb-6 md:pb-12 ">
     <div
         class="relative mx-auto max-w-lg p-4 rounded-lg bg-card text-card-foreground h-full bg-opacity-50 sm:shadow-sm sm:p-6 sm:border overflow-y-hidden">
-        @if (form.disabled){
+        @if (form.disabled && !successSubmitted){
         <div class="absolute top-0 left-0 w-full ">
             <mat-progress-bar color="accent" mode="query"></mat-progress-bar>
         </div>
         }
         <div class="space-y-2 text-center mb-10">
             <h1 class="text-3xl font-bold">
-                Registro de Estudiante
+                Registro Catequista
             </h1>
             <p class="text-gray-500 dark:text-gray-400">
                 Completa el formulario con los tus datos.
@@ -133,6 +133,26 @@
                 <div class="invalid-feedback tracking-wide text-red-500">
                     @if (f['phone'].errors['required']) {
                     <div>El Nro. de celular es obligatorio</div>
+                    }
+                </div>
+                }
+            </div>
+
+            <!-- DNI -->
+            <div class="space-y-2">
+                <label
+                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    for="dni">
+                    Nro. de DNI
+                </label>
+                <input type="tel" formControlName="dni"
+                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:border-amber-300 focus:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-50"
+                    id="dni" placeholder="9567XXXXX" maxlength="9"
+                    [ngClass]="{'border-red-500': submitted && f['dni'].errors}">
+                @if (submitted && f['dni'].errors) {
+                <div class="invalid-feedback tracking-wide text-red-500">
+                    @if (f['dni'].errors['required']) {
+                    <div>El Nro. de DNI es obligatorio</div>
                     }
                 </div>
                 }

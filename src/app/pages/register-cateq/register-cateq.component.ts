@@ -58,9 +58,9 @@ import { AuthService } from '../../services/auth-service';
     `,
   ],
 })
-export class DialogAnimationsExampleDialog {
+export class SuccessDialog {
   constructor(
-    public dialogRef: MatDialogRef<DialogAnimationsExampleDialog>,
+    public dialogRef: MatDialogRef<SuccessDialog>,
     private router: Router
   ) {}
 
@@ -70,18 +70,9 @@ export class DialogAnimationsExampleDialog {
   }
 }
 
-@Component({
-  selector: 'snack-bar-annotated-component-example',
-  templateUrl: 'activities-error.snackbar.html',
-  standalone: true,
-  imports: [MatFormFieldModule, FormsModule, MatInputModule, MatButtonModule],
-})
-export class SnackBarAnnotatedComponentExample {
-  snackBarRef = inject(MatSnackBarRef);
-}
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-register-cateq',
   standalone: true,
   imports: [
     HttpClientModule,
@@ -94,17 +85,14 @@ export class SnackBarAnnotatedComponentExample {
     MatAutocompleteModule,
     AsyncPipe,
   ],
-  templateUrl: './register.component.html',
+  templateUrl: './register-cateq.component.html'
 })
-export default class RegisterComponent implements OnInit {
-  carreras: OptionSelect[] = [];
-  activities: number[] = [];
+export default class RegisterCateqComponent implements OnInit{
   durationInSeconds = 5;
   submitted = false;
   filteredOptions: OptionSelect[] = [];
   successSubmitted: boolean = false;
 
-  private carreraService = inject(CarreraService);
   private authService = inject(AuthService);
 
   form: FormGroup = new FormGroup({
@@ -113,14 +101,12 @@ export default class RegisterComponent implements OnInit {
     firstName: new FormControl(''),
     lastName: new FormControl(''),
     dni: new FormControl(''),
-    career: new FormControl(''),
     phone: new FormControl(''),
     email: new FormControl(''),
   });
 
   constructor(
     private formBuilder: FormBuilder,
-    private _snackBar: MatSnackBar,
     public dialog: MatDialog
   ) {}
 
@@ -132,23 +118,12 @@ export default class RegisterComponent implements OnInit {
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
         dni: ['', Validators.required],
-        career: ['', Validators.required],
         phone: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
       },
       {
         validators: [Validation.match('password', 'confirmPassword')],
       }
-    );
-    this.form.disable();
-    this.carreraService.getCarreras().subscribe(
-      (data: OptionSelect[]) => {
-        if (data.length) {
-          this.carreras = data;
-          this.form.enable();
-        }
-      },
-      (error) => console.error('Error al obtener las carreras', error)
     );
   }
 
@@ -168,7 +143,7 @@ export default class RegisterComponent implements OnInit {
         email: this.form.value.email,
         carrera: this.form.value.career,
       };
-      this.authService.registrarEstudianteBff(estudiante).subscribe(
+      this.authService.registrarCatequistaBff(estudiante).subscribe(
         (data) => {
           console.log(data);
           if (data.resultadoRegistro == true) {
@@ -185,24 +160,9 @@ export default class RegisterComponent implements OnInit {
       return;
     }
   }
+  
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;
-  }
-
-  changeAutoComplete(event: any) {
-    console.log(event.target.value);
-    const filterValue = event.target.value.toLowerCase();
-    this.filteredOptions = this.carreras.filter((o) =>
-      o.nombre.toLowerCase().includes(filterValue)
-    );
-  }
-
-  openSnackBar() {
-    this._snackBar.openFromComponent(SnackBarAnnotatedComponentExample, {
-      duration: this.durationInSeconds * 1000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-    });
   }
 
   openDialog(): void {
@@ -221,14 +181,7 @@ export default class RegisterComponent implements OnInit {
       disableClose: true,
     };
     const configDialog = anchoPantalla < 650 ? configMobile : configDesktop;
-    this.dialog.open(DialogAnimationsExampleDialog, configDialog);
-  }
-
-  setActivities(idActivitie: number): void {
-    const activitie = this.activities.indexOf(idActivitie);
-    activitie === -1
-      ? this.activities.push(idActivitie)
-      : this.activities.splice(activitie, 1);
+    this.dialog.open(SuccessDialog, configDialog);
   }
 
   onReset(): void {
